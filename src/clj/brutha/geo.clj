@@ -1,4 +1,4 @@
-(ns clj.brutha.geo
+(ns brutha.geo
   (:require [brutha.math :refer [sqrt]]))
 
 (defprotocol IPoint
