@@ -1,4 +1,4 @@
-(ns clj.brutha.geo
+(ns brutha.geo
   (:require [brutha.math :refer [sqrt]]))
 
 (defprotocol IPoint
@@ -43,8 +43,12 @@
 (defn p+ [p1 p2]
   (p-map + p1 p2))
 
+(defn p-inv [p]
+  (let [[x y] (-vec p)]
+    (point (/ 1 x) (/ 1 y))))
+
 (defn p- [p1 p2]
-  (p-map + p1 p2))
+  (p-map - p1 p2))
 
 (defn p* [p1 m]
   (dot p1 [m m]))
@@ -139,6 +143,12 @@
 (defn rect [tl dims]
   {:pre [(p>= dims [0 0])]}
   (->Rect tl dims))
+
+(defn dims [b]
+  (-dims b))
+
+(defn top-left [b]
+  (-top-left b))
 
 (defn p-inside? [p b]
   (let [tl (-top-left b)
