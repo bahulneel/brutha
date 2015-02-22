@@ -1,13 +1,13 @@
 (ns clj.brutha.geo
   (:require [brutha.math :refer [sqrt]]))
 
-(defprotocol IPos
+(defprotocol IPoint
   (-x [p])
   (-y [p])
   (-vec [p]))
 
 (defrecord Point [x y]
-  IPos
+  IPoint
   (-x [_]
     x)
   (-y [_]
@@ -15,7 +15,10 @@
   (-vec [_]
     [x y]))
 
-(extend-protocol IPos
+(defn point? [p]
+  (satisfies? IPoint p))
+
+(extend-protocol IPoint
   clojure.lang.PersistentVector
   (-x [[x _]]
     x)
@@ -77,9 +80,14 @@
 
 (defprotocol IBox
   (-top-left [b])
+  (-top-right [b])
+  (-bottom-left [b])
   (-bottom-right [b])
   (-dims [b])
   (-center [b]))
+
+(defn box? [b]
+  (satisfies? IBox b))
 
 (defrecord Box [tl br]
   IBox
@@ -87,6 +95,14 @@
     tl)
   (-bottom-right [_]
     br)
+  (-top-right [_]
+    (let [[t l] (-vec tl)
+          [b r] (-vec br)]
+      (point t r)))
+  (-bottom-left [_]
+    (let [[t l] (-vec tl)
+          [b r] (-vec br)]
+      (point b l)))
   (-dims [_]
     (p- br tl))
   (-center [_]
@@ -101,6 +117,14 @@
     tl)
   (-bottom-right [_]
     (p+ tl dims))
+  (-top-right [_]
+    (let [[t l] (-vec tl)
+          [b r] (-vec (p+ tl dims))]
+      (point t r)))
+  (-bottom-left [_]
+    (let [[t l] (-vec tl)
+          [b r] (-vec (p+ tl dims))]
+      (point b l)))
   (-dims [_]
     dims)
   (-center [_]
@@ -115,3 +139,33 @@
 (defn rect [tl dims]
   {:pre [(p>= dims [0 0])]}
   (->Rect tl dims))
+
+(defn p-inside? [p b]
+  (let [tl (-top-left b)
+        br (-bottom-right b)]
+    (and (p<= tl p)
+         (p>= br p))))
+
+(defn b-inside? [b1 b2]
+  (let [tl (-top-left b1)
+        br (-bottom-right b1)]
+    (and (p-inside? b2 tl)
+         (p-inside? b2 br))))
+
+(defn inside? [x b]
+  (cond
+   (point? x) (p-inside? x b)
+   (box? x) (b-inside? x b)
+   :else false))
+
+(defn corners [b]
+  [(-top-left b)
+   (-top-right b)
+   (-bottom-right b)
+   (-bottom-left b)])
+
+(defn intersects? [b1 b2]
+  (->> b2
+       corners
+       (some #(inside? % b1))
+       some?))
