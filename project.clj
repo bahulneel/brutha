@@ -22,7 +22,8 @@
                  [datascript "0.9.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [lein-environ "1.0.0"]]
+            [lein-environ "1.0.0"]
+            [com.keminglabs/cljx "0.6.0"]]
 
   :min-lein-version "2.5.0"
 
@@ -36,6 +37,16 @@
                                         :externs       ["react/externs/react.js"]
                                         :optimizations :none
                                         :pretty-print  true}}}}
+
+  :cljx {:builds [{:source-paths ["src/cljx"]
+                 :output-path "target/classes"
+                 :rules :clj}
+
+                {:source-paths ["src/cljx"]
+                 :output-path "target/classes"
+                 :rules :cljs}]}
+
+  :prep-tasks [["cljx" "once"] "javac" "compile"]
 
   :profiles {:dev {:repl-options {:init-ns brutha.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
