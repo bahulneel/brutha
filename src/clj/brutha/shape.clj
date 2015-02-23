@@ -50,6 +50,21 @@
   ([id p s]
      (->RefShape id p s)))
 
+(defrecord IdShape [id shape]
+  IShape
+  (-id [_]
+    id)
+  (-position [_]
+    (position shape))
+  (-scale [_]
+    (scale shape))
+  IContainer
+  (-content [_]
+    (content shape)))
+
+(defn id= [shape id]
+  (->IdShape id shape))
+
 (defrecord TransformedShape [shape p s]
   IShape
   (-id [_]

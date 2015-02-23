@@ -69,6 +69,22 @@
   (-body [_]
     nil))
 
+(extend-type brutha.shape.IdShape
+  IElement
+  (-tag [s]
+    (tag (sh/content s)))
+  (-attrs [s]
+    (-> s
+        sh/content
+        attrs
+        (assoc :id (name (sh/id s)))))
+  (-scale [s]
+    (sh/scale s))
+  (-position [s]
+    (sh/position s))
+  (-body [s]
+    (body (sh/content s))))
+
 (extend-type brutha.shape.TransformedShape
    IElement
   (-tag [s]

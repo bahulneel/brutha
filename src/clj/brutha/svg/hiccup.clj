@@ -57,16 +57,16 @@
          (apply str))))
 
 (defn norm-num [n]
-  (apply-if number? float n))
+  (apply-if number?
+            float n))
 
 (defn render-element [e]
   (let [t (el/tag e)
         a (map-vals norm-num (el/attrs e))
         xf (xform e)
-        a (apply-unless empty?
-                        xf
-                        #(assoc a :transform %))
+        a (apply-unless (constantly (empty? xf))
+                        assoc a :transform xf)
         b (render (el/body e))]
-    (if (keyword? (first b))
+    (if (or (string? b) (keyword? (first b)))
       [t a b]
       (apply vector t a b))))
