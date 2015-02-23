@@ -4,8 +4,7 @@
             [brutha.view :as bv]
             [brutha.geo :as geo]
             [brutha.shape :as bsh]
-            [brutha.svg.element :as el])
-  (:import [brutha.svg.element SvgElement]))
+            [brutha.svg.element :as el]))
 
 (defprotocol ISvg
   (-dims [s])

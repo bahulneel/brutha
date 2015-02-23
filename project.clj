@@ -28,7 +28,7 @@
 
   :uberjar-name "brutha.jar"
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
+  :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/generated/cljs"]
                              :compiler {:output-to     "resources/public/js/app.js"
                                         :output-dir    "resources/public/js/out"
                                         :source-map    "resources/public/js/out.js.map"
@@ -43,6 +43,10 @@
 
                   {:source-paths ["src/cljx"]
                    :output-path "target/classes"
+                   :rules :cljs}
+
+                  {:source-paths ["src/cljx"]
+                   :output-path "target/generated/cljs"
                    :rules :cljs}]}
 
   :prep-tasks [["cljx" "once"] "javac" "compile"]
