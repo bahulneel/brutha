@@ -61,7 +61,7 @@
   (-tag [_]
     :use)
   (-attrs [s]
-    {:xlink:href (sh/link s)})
+    {:xlink:href (str "#" (name (sh/link s)))})
   (-scale [s]
     (sh/scale s))
   (-position [s]

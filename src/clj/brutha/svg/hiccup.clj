@@ -15,11 +15,27 @@
     (let [[x y] p]
       (str s "(" x "," y ")"))))
 
+(defn norm-scale
+  [s]
+  (when-let [[x y] s]
+    (when-not (and (= 1 x) (= 1 y))
+      [(float x) (float y)])))
+
+(defn norm-pos
+  [s]
+  (when-let [[x y] s]
+    (when-not (and (= 0 x) (= 0 y))
+      [(float x) (float y)])))
+
 (defn xform [e]
-  (let [s (xform-str "scale"
-                     (el/scale e))
-        p (xform-str "translate"
-                     (el/position e))]
+  (let [s (->> e
+               el/scale
+               norm-scale
+               (xform-str "scale"))
+        p (->> e
+               el/position
+               norm-pos
+               (xform-str "translate"))]
     (->> [s p]
          (remove nil?)
          (interpose ",")
