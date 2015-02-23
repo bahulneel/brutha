@@ -4,5 +4,7 @@
             [brutha.svg.hiccup :as h]))
 
 (defn svg-component [svg owner]
-  (om/component
-   (html (h/render svg))))
+  (let [rendered (h/render (om/value svg))]
+    (prn rendered)
+    (om/component
+     (html rendered))))

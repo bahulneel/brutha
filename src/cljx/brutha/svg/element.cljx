@@ -50,7 +50,7 @@
 
 (defn element
   ([tag body]
-     (element nil body))
+     (element tag nil body))
   ([tag attrs body]
      (element tag attrs nil nil body))
   ([tag attrs scale pos body]

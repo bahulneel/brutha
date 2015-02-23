@@ -10,3 +10,5 @@
         view (bv/viewport r i)
         scene (bs/scene view)]
     (svg/svg scene)))
+
+(def add-shape bs/add-shape)

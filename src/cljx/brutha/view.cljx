@@ -11,7 +11,7 @@
   (satisfies? IViewport v))
 
 (defn bounds [v]
-  (-bounds [v]))
+  (-bounds v))
 
 (defn project [v p]
   (-project v p))
@@ -37,8 +37,10 @@
            (geo/dot p))))
   (-project [v p]
     (let [p' (-scale v p)
-          tl (geo/top-left real)]
-      (geo/p+ p' tl))))
+          tl (-scale v (geo/top-left internal))
+          tl' (geo/top-left real)
+          off (geo/p- tl' tl)]
+      (geo/p+ p' off))))
 
 (defn viewport [r i]
   {:pre [(geo/box? r)

@@ -10,7 +10,8 @@
   (satisfies? IPoint p))
 
 (extend-protocol IPoint
-  clojure.lang.PersistentVector
+  #+clj  clojure.lang.PersistentVector
+  #+cljs cljs.core.PersistentVector
   (-x [[x _]]
     x)
   (-y [[_ y]]
@@ -84,7 +85,7 @@
 (defn box? [b]
   (satisfies? IBox b))
 
-(defrecord Box [tl br]
+(defrecord BoundingBox [tl br]
   IBox
   (-top-left [_]
     tl)
@@ -129,7 +130,7 @@
 
 (defn box [tl br]
   {:pre [(p<= tl br)]}
-  (->Box tl br))
+  (->BoundingBox tl br))
 
 (defn rect [tl dims]
   {:pre [(p>= dims [0 0])]}

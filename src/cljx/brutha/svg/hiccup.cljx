@@ -21,7 +21,7 @@
 (defn render [e]
   (cond
    (sequential? e) (map render e)
-   (satisfies? el/IElement e) (render-element e)
+   (el/element? e) (render-element e)
    (satisfies? IRaw e) (content e)
    :else e))
 
@@ -51,7 +51,7 @@
                el/position
                norm-pos
                (xform-str "translate"))]
-    (->> [s p]
+    (->> [p s]
          (remove nil?)
          (interpose ",")
          (apply str))))

@@ -26,7 +26,6 @@
   (-view [_]
     view)
   (-layers [_]
-    (prn (vals layers))
     (sort-by bl/z (vals layers)))
   (-add-shape [s sh z]
     (let [z (or z 0)

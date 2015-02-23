@@ -2,7 +2,10 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [brutha.svg.scene :as ss]
+            [brutha.svg.elements :as el]
             [brutha.om :as bom]))
+
+(enable-console-print!)
 
 (defn scene
   [tl br]
@@ -16,8 +19,8 @@
                    (- 5))]
     (ss/scene [width height] tl br)))
 
-(defonce app-state (atom {:text "Hello Chestnut!"
-                          :scene (scene [-100 -100] [100 100])}))
+(def app-state (atom {:text "Hello Chestnut!"
+                      :scene (scene [-100 -100] [100 100])}))
 
 (defn main []
   (om/root
@@ -25,8 +28,11 @@
      (reify
        om/IRender
        (render [_]
-         (dom/div nil
-                  (dom/h1 nil (:text app))
-                  (om/build bom/svg-component (:scene app))))))
+         (om/build bom/svg-component (:scene app)))))
    app-state
    {:target (. js/document (getElementById "app"))}))
+
+(swap! app-state update-in [:scene] ss/add-shape (el/line [0 0] [0 50]
+                                                          {:stroke-width 1
+                                                           :class "line"
+                                                           :stroke :black}))

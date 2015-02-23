@@ -1,10 +1,10 @@
 (ns brutha.svg
-  (:require [brutha.scene :as bs]
+  (:require [brutha.svg.element :as el]
+            [brutha.scene :as bs]
             [brutha.layer :as bl]
             [brutha.view :as bv]
             [brutha.geo :as geo]
-            [brutha.shape :as bsh]
-            [brutha.svg.element :as el]))
+            [brutha.shape :as bsh]))
 
 (defprotocol ISvg
   (-dims [s])
@@ -48,10 +48,18 @@
   (-defs [_]
     (vals defs))
   (-shapes [_]
-    (->> scene
-        bs/layers
-        (map bl/shapes)
-        group))
+    (let [v (bs/view scene)
+          xlate (bv/project v [0 0])
+          scale (bv/scale v [1 1])]
+      (prn xlate)
+      (->> scene
+           bs/layers
+           (map bl/shapes)
+           (map group)
+           (map (fn [s]
+                  (-> s
+                      (bsh/s+ xlate)
+                      (bsh/s* scale)))))))
   el/IElement
   (-tag [_]
     :svg)
