@@ -3,8 +3,9 @@
             [brutha.layer :as bl]
             [brutha.view :as bv]
             [brutha.geo :as geo]
-            [brutha.shape :as bsh])
-  (:import [brutha.shape RefShape TransformedShape]))
+            [brutha.shape :as bsh]
+            [brutha.svg.element :as el])
+  (:import [brutha.svg.element SvgElement]))
 
 (defprotocol ISvg
   (-dims [s])
@@ -14,39 +15,7 @@
 (defn svg? [s]
   (satisfies? ISvg s))
 
-(defprotocol IShape
-  (-shape [s]))
-
-(extend-protocol IShape
-  RefShape
-  (-shape [s]
-    (bsh/id s))
-  TransformedShape
-  (-shape [s]
-    (-shape (:shape s))))
-
-(defn shape? [s]
-  (satisfies? IShape s))
-
-(defrecord SvgShape [id shape]
-  bsh/IShape
-  (-position [_]
-    [0 0])
-  (-id [_]
-    id)
-  (-scale [_]
-    [1 1])
-  IShape
-  (-shape [_]
-    shape))
-
-(defn shape
-  ([s]
-     (shape s nil))
-  ([s id]
-     (->SvgShape id s)))
-
-(defrecord SvgGroup [shapes]
+(defrecord SvgGroup [body]
   bsh/IShape
   (-position [_]
     [0 0])
@@ -54,9 +23,17 @@
     [1 1])
   (-id [_]
     nil)
-  IShape
-  (-shape [_]
-    shapes))
+  el/IElement
+  (-tag [_]
+    :g)
+  (-position [_]
+    nil)
+  (-scale [_]
+    nil)
+  (-attrs [_]
+    nil)
+  (-body [_]
+    body))
 
 (defn group [shapes]
   (->SvgGroup shapes))
@@ -74,6 +51,21 @@
         bs/layers
         (map bl/shapes)
         group))
+  el/IElement
+  (-tag [_]
+    :svg)
+  (-attrs [s]
+    (let [[w h] (dims s)])
+    {:width w
+     :height h})
+  (-position [_]
+    nil)
+  (-scale [_]
+    nil)
+  (-body [s]
+    (apply vector
+           (el/element :defs (-defs s))
+           (-shapes s)))
   bs/IScene
   (-view [_]
     (bs/view scene))
