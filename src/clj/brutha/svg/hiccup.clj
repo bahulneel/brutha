@@ -1,5 +1,6 @@
 (ns brutha.svg.hiccup
-  (:require [brutha.svg.element :as el]))
+  (:require [brutha.svg.element :as el]
+            [brutha.utils :refer [map-vals apply-if apply-unless]]))
 
 (declare render-element)
 
@@ -55,14 +56,17 @@
          (interpose ",")
          (apply str))))
 
+(defn norm-num [n]
+  (apply-if number?
+            float n))
+
 (defn render-element [e]
   (let [t (el/tag e)
-        a (el/attrs e)
+        a (map-vals norm-num (el/attrs e))
         xf (xform e)
-        a (if (empty? xf)
-            a
-            (assoc a :transform xf))
+        a (apply-unless (constantly (empty? xf))
+                        assoc a :transform xf)
         b (render (el/body e))]
-    (if (keyword? (first b))
+    (if (or (string? b) (keyword? (first b)))
       [t a b]
       (apply vector t a b))))
