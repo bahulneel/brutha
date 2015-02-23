@@ -3,17 +3,31 @@
 
 (declare render-element)
 
+(defprotocol IRaw
+  (-content [r]))
+
+(defn content [r]
+  (-content r))
+
+(defrecord Raw [h]
+  IRaw
+  (-content [_]
+    h))
+
+(defn raw [h]
+  (->Raw h))
+
 (defn render [e]
   (cond
    (sequential? e) (map render e)
    (satisfies? el/IElement e) (render-element e)
+   (satisfies? IRaw e) (content e)
    :else e))
 
 (defn xform-str
   [s p]
-  (when p
-    (let [[x y] p]
-      (str s "(" x "," y ")"))))
+  (when-let [[x y] p]
+    (str s "(" x "," y ")")))
 
 (defn norm-scale
   [s]
