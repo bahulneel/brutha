@@ -22,8 +22,7 @@
                  [datascript "0.9.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [lein-environ "1.0.0"]
-            [com.keminglabs/cljx "0.6.0"]]
+            [lein-environ "1.0.0"]]
 
   :min-lein-version "2.5.0"
 
@@ -51,7 +50,8 @@
   :profiles {:dev {:repl-options {:init-ns brutha.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]]
+                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]
+                             [com.keminglabs/cljx "0.6.0"]]
 
                    :figwheel {:http-server-root "public"
                               :port 3449

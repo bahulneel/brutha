@@ -16,13 +16,6 @@
   (satisfies? ISvg s))
 
 (defrecord SvgGroup [body]
-  bsh/IShape
-  (-position [_]
-    [0 0])
-  (-scale [_]
-    [1 1])
-  (-id [_]
-    nil)
   el/IElement
   (-tag [_]
     :g)
@@ -34,6 +27,15 @@
     nil)
   (-body [_]
     body))
+
+(extend-type SvgGroup
+  bsh/IShape
+  (-position [_]
+    [0 0])
+  (-scale [_]
+    [1 1])
+  (-id [_]
+    nil))
 
 (defn group [shapes]
   (->SvgGroup shapes))
@@ -55,9 +57,9 @@
   (-tag [_]
     :svg)
   (-attrs [s]
-    (let [[w h] (dims s)])
-    {:width w
-     :height h})
+    (let [[w h] (-dims s)]
+      {:width w
+       :height h}))
   (-position [_]
     nil)
   (-scale [_]
