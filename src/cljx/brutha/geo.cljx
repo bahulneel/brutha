@@ -1,4 +1,4 @@
-(ns clj.brutha.geo
+(ns brutha.geo
   (:require [brutha.math :refer [sqrt]]))
 
 (defprotocol IPoint
@@ -6,20 +6,12 @@
   (-y [p])
   (-vec [p]))
 
-(defrecord Point [x y]
-  IPoint
-  (-x [_]
-    x)
-  (-y [_]
-    y)
-  (-vec [_]
-    [x y]))
-
 (defn point? [p]
   (satisfies? IPoint p))
 
 (extend-protocol IPoint
-  clojure.lang.PersistentVector
+  #+clj  clojure.lang.PersistentVector
+  #+cljs cljs.core.PersistentVector
   (-x [[x _]]
     x)
   (-y [[_ y]]
@@ -30,7 +22,7 @@
 (defn point [x y]
   {:pre [(number? x)
          (number? y)]}
-  (->Point x y))
+  [x y])
 
 (defn p-map [f p1 p2]
   (let [[x1 y1] (-vec p1)
@@ -43,8 +35,12 @@
 (defn p+ [p1 p2]
   (p-map + p1 p2))
 
+(defn p-inv [p]
+  (let [[x y] (-vec p)]
+    (point (/ 1 x) (/ 1 y))))
+
 (defn p- [p1 p2]
-  (p-map + p1 p2))
+  (p-map - p1 p2))
 
 (defn p* [p1 m]
   (dot p1 [m m]))
@@ -89,7 +85,7 @@
 (defn box? [b]
   (satisfies? IBox b))
 
-(defrecord Box [tl br]
+(defrecord BoundingBox [tl br]
   IBox
   (-top-left [_]
     tl)
@@ -134,11 +130,17 @@
 
 (defn box [tl br]
   {:pre [(p<= tl br)]}
-  (->Box tl br))
+  (->BoundingBox tl br))
 
 (defn rect [tl dims]
   {:pre [(p>= dims [0 0])]}
   (->Rect tl dims))
+
+(defn dims [b]
+  (-dims b))
+
+(defn top-left [b]
+  (-top-left b))
 
 (defn p-inside? [p b]
   (let [tl (-top-left b)

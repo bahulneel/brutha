@@ -1,4 +1,4 @@
-(defproject brutha "0.1.0-SNAPSHOT"
+(defproject brutha "0.1.0"
   :description "FIXME: write description"
   :url "http://brutha.herokuapp.com"
   :license {:name "Eclipse Public License"
@@ -22,14 +22,13 @@
                  [datascript "0.9.0"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [lein-environ "1.0.0"]
-            [com.keminglabs/cljx "0.6.0"]]
+            [lein-environ "1.0.0"]]
 
   :min-lein-version "2.5.0"
 
   :uberjar-name "brutha.jar"
 
-  :cljsbuild {:builds {:app {:source-paths ["src/cljs"]
+  :cljsbuild {:builds {:app {:source-paths ["src/cljs" "target/generated/cljs"]
                              :compiler {:output-to     "resources/public/js/app.js"
                                         :output-dir    "resources/public/js/out"
                                         :source-map    "resources/public/js/out.js.map"
@@ -39,19 +38,24 @@
                                         :pretty-print  true}}}}
 
   :cljx {:builds [{:source-paths ["src/cljx"]
-                 :output-path "target/classes"
-                 :rules :clj}
+                   :output-path "target/classes"
+                   :rules :clj}
 
-                {:source-paths ["src/cljx"]
-                 :output-path "target/classes"
-                 :rules :cljs}]}
+                  {:source-paths ["src/cljx"]
+                   :output-path "target/classes"
+                   :rules :cljs}
+
+                  {:source-paths ["src/cljx"]
+                   :output-path "target/generated/cljs"
+                   :rules :cljs}]}
 
   :prep-tasks [["cljx" "once"] "javac" "compile"]
 
   :profiles {:dev {:repl-options {:init-ns brutha.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]]
+                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]
+                             [com.keminglabs/cljx "0.6.0"]]
 
                    :figwheel {:http-server-root "public"
                               :port 3449

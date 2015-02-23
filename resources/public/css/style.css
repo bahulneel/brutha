@@ -1,3 +1,13 @@
-h1 {
-  text-decoration: underline;
+body {
+    margin: 0;
+    padding: 0;
+}
+
+line, rect, circle {
+    vector-effect: non-scaling-stroke;
+}
+
+text {
+    font-family: Courier;
+    font-size: 1px;
 }
