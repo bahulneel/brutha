@@ -48,10 +48,12 @@
 
   :prep-tasks [["cljx" "once"] "javac" "compile"]
 
-  :profiles {:dev {:repl-options {:init-ns brutha.server
+  :profiles {:dev {:dependencies [[midje "1.6.3"]]
+                   :repl-options {:init-ns brutha.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
-                   :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]]
+                   :plugins [[lein-midje "3.1.3"]
+                             [lein-figwheel "0.1.4-SNAPSHOT"]]
 
                    :figwheel {:http-server-root "public"
                               :port 3449
