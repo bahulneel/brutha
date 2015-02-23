@@ -20,7 +20,7 @@
     (ss/scene [width height] tl br)))
 
 (def app-state (atom {:text "Hello Chestnut!"
-                      :scene (scene [-100 -100] [100 100])}))
+                      :scene (scene [-20 -20] [20 20])}))
 
 (defn main []
   (om/root
@@ -40,8 +40,7 @@
                   (el/line [x 0] [x size] attrs))
                 (for [y (range (/ step 2) size step)]
                   (el/line [0 y] [size y] attrs)))
-        el/g
-        (el/id :grid))))
+        el/g)))
 
 (defn tile [c r size]
   (let [g (grid size (/ size 10))
@@ -51,4 +50,13 @@
 
 (doseq [c [-2 -1 0 1]
         r [-2 -1 0 1]]
-  (swap! app-state update-in [:scene] ss/add-shape (tile c r 50)))
+  (swap! app-state update-in [:scene] ss/add-shape (tile c r 10) -2))
+
+(swap! app-state update-in [:scene] ss/add-shape (el/circle [0 0] 0.5 {:fill :red}))
+
+(swap! app-state update-in [:scene] ss/add-shape (el/circle [-5 3] 0.5 {:fill :red}))
+
+(swap! app-state update-in [:scene] ss/add-shape (el/line [0 0] [-5 3]
+                                                          {:class :line
+                                                           :stroke-width 1
+                                                           :stroke :green}) -1)

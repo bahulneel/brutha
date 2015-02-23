@@ -36,7 +36,7 @@
      (circle c r {}))
   ([c r attrs]
      (let [attrs (-> attrs
-                     (p->props c :cx :cx)
+                     (p->props c :cx :cy)
                      (assoc :r r))]
        (el/element :circle attrs nil))))
 
