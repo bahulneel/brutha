@@ -12,3 +12,5 @@
     (svg/svg scene)))
 
 (def add-shape bs/add-shape)
+
+(def define-shape svg/define)

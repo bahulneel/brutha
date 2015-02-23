@@ -1,6 +1,7 @@
 (ns brutha.svg.elements
   (:require [brutha.svg :as svg]
             [brutha.svg.element :as el]
+            [brutha.shape :as bsh]
             [brutha.geo :as geo]))
 
 (defn p->props
@@ -59,3 +60,11 @@
 (defn g
   [& es]
   (svg/group es))
+
+(def id bsh/id=)
+
+(def shape bsh/ref-shape)
+
+(def s+ bsh/s+)
+
+(def s* bsh/s*)

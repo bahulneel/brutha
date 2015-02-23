@@ -9,10 +9,14 @@
 (defprotocol ISvg
   (-dims [s])
   (-defs [s])
-  (-shapes [s]))
+  (-shapes [s])
+  (-define [s sh]))
 
 (defn svg? [s]
   (satisfies? ISvg s))
+
+(defn define [s sh]
+  (-define s sh))
 
 (defrecord SvgGroup [body]
   el/IElement
@@ -47,11 +51,13 @@
       (geo/dims b)))
   (-defs [_]
     (vals defs))
+  (-define [s sh]
+    (let [id (bsh/id sh)]
+      (update-in s [:defs] assoc id sh)))
   (-shapes [_]
     (let [v (bs/view scene)
           xlate (bv/project v [0 0])
           scale (bv/scale v [1 1])]
-      (prn xlate)
       (->> scene
            bs/layers
            (map bl/shapes)

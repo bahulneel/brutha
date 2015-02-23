@@ -5,6 +5,5 @@
 
 (defn svg-component [svg owner]
   (let [rendered (h/render (om/value svg))]
-    (prn rendered)
     (om/component
      (html rendered))))

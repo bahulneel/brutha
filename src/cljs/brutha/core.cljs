@@ -32,7 +32,23 @@
    app-state
    {:target (. js/document (getElementById "app"))}))
 
-(swap! app-state update-in [:scene] ss/add-shape (el/line [0 0] [0 50]
-                                                          {:stroke-width 1
-                                                           :class "line"
-                                                           :stroke :black}))
+(defn grid [size step]
+  (let [attrs {:stroke-width 1
+               :class "line"
+               :stroke :grey}]
+    (-> (concat (for [x (range (/ step 2) size step)]
+                  (el/line [x 0] [x size] attrs))
+                (for [y (range (/ step 2) size step)]
+                  (el/line [0 y] [size y] attrs)))
+        el/g
+        (el/id :grid))))
+
+(defn tile [c r size]
+  (let [g (grid size (/ size 10))
+        x (* c size)
+        y (* r size)]
+    (el/s+ g [x y])))
+
+(doseq [c [-2 -1 0 1]
+        r [-2 -1 0 1]]
+  (swap! app-state update-in [:scene] ss/add-shape (tile c r 50)))
