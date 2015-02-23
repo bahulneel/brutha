@@ -13,10 +13,9 @@
                  [compojure "1.2.0"]
                  [enlive "1.1.5"]
                  [om "0.7.3"]
-                 [figwheel "0.1.4-SNAPSHOT"]
                  [environ "1.0.0"]
                  [com.cemerick/piggieback "0.1.3"]
-                 [weasel "0.4.0-SNAPSHOT"]
+                 [weasel "0.4.2"]
                  [leiningen "2.5.0"]
                  [sablono "0.3.4"]
                  [datascript "0.9.0"]]
@@ -51,7 +50,8 @@
 
   :prep-tasks [["cljx" "once"] "javac" "compile"]
 
-  :profiles {:dev {:repl-options {:init-ns brutha.server
+  :profiles {:dev {:dependencies [[figwheel "0.1.4-SNAPSHOT"]]
+                   :repl-options {:init-ns brutha.server
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
                    :plugins [[lein-figwheel "0.1.4-SNAPSHOT"]
