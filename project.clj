@@ -1,4 +1,4 @@
-(defproject brutha "0.1.1"
+(defproject brutha "0.1.2"
   :description "FIXME: write description"
   :url "http://brutha.herokuapp.com"
   :license {:name "Eclipse Public License"
