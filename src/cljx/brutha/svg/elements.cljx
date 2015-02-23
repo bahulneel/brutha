@@ -21,10 +21,11 @@
        (el/element :line attrs nil))))
 
 (defn rect
-  ([b]
-     (rect b {}))
-  ([b attrs]
-     (let [p (geo/top-left b)
+  ([tl wh]
+     (rect tl wh {}))
+  ([tl wh attrs]
+     (let [b (geo/rect tl wh)
+           p (geo/top-left b)
            d (geo/dims b)
            attrs (-> attrs
                      (p->props p :x :y)

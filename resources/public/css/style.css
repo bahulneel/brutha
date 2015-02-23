@@ -3,6 +3,11 @@ body {
     padding: 0;
 }
 
-line {
+line, rect, circle {
     vector-effect: non-scaling-stroke;
+}
+
+text {
+    font-family: Courier;
+    font-size: 1px;
 }
