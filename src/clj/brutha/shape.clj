@@ -18,14 +18,31 @@
 (defn scale [s]
   (-scale s))
 
+(defprotocol IContainer
+  (-content [s]))
+
+(defn content [s]
+  (if (satisfies? IContainer s)
+    (-content s)
+    s))
+
+(defprotocol ILink
+  (-link [s]))
+
+(defn link [s]
+  (-link s))
+
 (defrecord RefShape [id p s]
   IShape
   (-id [_]
-    id)
+    nil)
   (-position [_]
     p)
   (-scale [_]
-    s))
+    s)
+  ILink
+  (-link [_]
+    id))
 
 (defn ref-shape
   ([id]
@@ -40,7 +57,10 @@
   (-position [_]
     (geo/p+ p (-position shape)))
   (-scale [_]
-    (geo/dot s (-scale shape))))
+    (geo/dot s (-scale shape)))
+  IContainer
+  (-content [_]
+    (content shape)))
 
 (defn x-shape [shape p s]
   (->TransformedShape shape p s))

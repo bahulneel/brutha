@@ -6,15 +6,6 @@
   (-y [p])
   (-vec [p]))
 
-(defrecord Point [x y]
-  IPoint
-  (-x [_]
-    x)
-  (-y [_]
-    y)
-  (-vec [_]
-    [x y]))
-
 (defn point? [p]
   (satisfies? IPoint p))
 
@@ -30,7 +21,7 @@
 (defn point [x y]
   {:pre [(number? x)
          (number? y)]}
-  (->Point x y))
+  [x y])
 
 (defn p-map [f p1 p2]
   (let [[x1 y1] (-vec p1)
