@@ -38,12 +38,12 @@
                                         :pretty-print  true}}}}
 
   :cljx {:builds [{:source-paths ["src/cljx"]
-                 :output-path "target/classes"
-                 :rules :clj}
+                   :output-path "target/classes"
+                   :rules :clj}
 
-                {:source-paths ["src/cljx"]
-                 :output-path "target/classes"
-                 :rules :cljs}]}
+                  {:source-paths ["src/cljx"]
+                   :output-path "target/classes"
+                   :rules :cljs}]}
 
   :prep-tasks [["cljx" "once"] "javac" "compile"]
 
