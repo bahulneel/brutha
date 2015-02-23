@@ -11,12 +11,10 @@
   [tl br]
   (let [width (-> js/window
                   .-innerWidth
-                  (max 240)
-                  (- 5))
+                  (max 240))
         height (-> js/window
                    .-innerHeight
-                   (max 240)
-                   (- 5))]
+                   (max 240))]
     (ss/scene [width height] tl br)))
 
 (def app-state (atom {:text "Hello Chestnut!"
